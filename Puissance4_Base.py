@@ -43,7 +43,7 @@ def loopToGetJeuAdv( inetvalle,idjeu,idAdv,tour,server=servergame):
     return advJeu
 
 def remplirGrille(joueur, jeu):
-    for i in range(grilleDim-1,-1,-1):
+    for i in range(grilleDim-1,-1):
         if(grille[i][jeu]==0):
             grille[i][jeu]=joueur
             break
@@ -110,9 +110,91 @@ joueurLocalquiCommence=True
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    return int(input("vueillez saisir la colonne de votre jeu entre 0 et "+ str(grilleDim-1) +" : "))
+    a=Jeufaitparminimax(grille)
+    print(a)
+    return a
 
+def Jeufaitparminimax(grille) :
+    score=Minimax_Decision(grille) #Jeu du minimax
+    mouv=ValeurPossible(grille)
+    meilleur=None
+    for a in mouv :
+        Grilleb=grille[:]
+        Input(a,grille)
+        if Minimax_Decision(Grilleb)>score:
+            meilleur=a
+    return meilleur
 
+def Input(i,grille) :
+    for j in range(grilleDim/2) :
+        if grille[i][grilleDim/2-j]!=0 :
+            grille[i][grilleDim/2-j]=1
+            break
+    
+        
+def estVictorieux(self) :
+     for k in range(0,12) :
+         for i in range(0,2) :
+             if self[k][i]==self[k][(i+1)]==self[k][(i+2)]==self[k][(i+3)] :
+                 return self[k][i]
+     for i in range(0,6) :
+         for k in range(0,8) :
+             if self[k][i]==self[(k+1)][i]==self[(k+2)][i]==self[(k+3)][i] :
+                 return self[k][i]
+                
+     for i in range(0,2) :
+         for k in range(0,8) :
+             if self[k][i]==self[(k+1)][(i+1)]==self[(i+2)][(k+2)]==self[(i+3)][(k+3)] :
+                 return self[k][i]
+             if self[(11-k)][(5-k)]==self[(10-k)][(4-k)]==self[(9-k)][(3-k)]==self[(8-k)][(2-k)] :
+                 return self[(11-k)][(5-k)]
+            
+     return 0
+ 
+def ValeurPossible(grille) :
+    t=[]
+    for i in range(grilleDim) :
+        if grille[i][0]!=0 :
+            t.append(i)
+    return t
+
+def Utility(grille) :
+        a=estVictorieux(grille)
+        if a==joueurLocal : return 1
+        if a==joueurDistant : return -1
+        else : return 0
+
+def Max_value(tab) :
+    ke=Utility(tab)
+    if ke!=0 : return ke
+    else :
+        v=-1000
+        for a in ValeurPossible(tab) :
+             grilleb=tab[:]
+             Input(a,grilleb)
+             v=max(v,grilleb.Min_value(grilleb))
+        return v
+                
+def Min_value(tab) :
+   ke=Utility(tab)
+   if ke!=0 : return ke
+   else :
+        v=+1000
+        for a in ValeurPossible(tab) :
+             grilleb=tab[:]
+             Input(a,grilleb)
+             v=min(v,Max_value(grilleb))
+        return v
+        
+def Minimax_Decision(tab) :
+    w=-1000
+    for a in ValeurPossible(tab) :
+        grilleb=tab[:]
+        Input(a,grilleb)
+        w=max(w,Min_value(grilleb))
+    return w
+    
+    
 # cette fonction est à remplacer une qui saisie le jeu de l'adversaire à votre IA
 def appliqueJeuAdv(jeu):
     print("jeu de l'adversair est ", jeu)
