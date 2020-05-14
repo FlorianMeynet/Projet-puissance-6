@@ -110,8 +110,8 @@ joueurLocalquiCommence=True
 
 #cette methode est à remplacer par votre une fonction IA qui propose le jeu
 def monjeu():
-    a=Jeufaitparminimax(grille)
-    print(a)
+    a=Simulation(grille)
+    print(" JE VEUX JOUER SUR LA CASE SUIVANTE SVPPPP : ", a)
     return a
 
 def Jeufaitparminimax(grille) :
@@ -126,9 +126,9 @@ def Jeufaitparminimax(grille) :
     return meilleur
 
 def Input(i,grille) :
-    for j in range(grilleDim/2) :
-        if grille[i][grilleDim/2-j]!=0 :
-            grille[i][grilleDim/2-j]=1
+    for j in range(6) :
+        if grille[i][5-j]!=0 :
+            grille[i][5-j]=1
             break
     
         
@@ -154,7 +154,11 @@ def estVictorieux(self) :
 def ValeurPossible(grille) :
     t=[]
     for i in range(grilleDim) :
+<<<<<<< HEAD
         if grille[0][i]!=0 :
+=======
+        if grille[i][0]==0 :
+>>>>>>> e43fa906580f57ec61a065e004fbc7009a72652b
             t.append(i)
     return t
 
@@ -163,8 +167,28 @@ def Utility(grille) :
         if a==joueurLocal : return 1
         if a==joueurDistant : return -1
         else : return 0
+        
+def Simulation(grille):
+    tab = []
+    liste = [-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2]
+    #print(ValeurPossible(grille))
+    for i in ValeurPossible(grille):
+        tab = grille[:]
+        #print(tab)
+        Input(i,tab)
+        liste.append(Utility(tab))
+        #print(liste)
 
-def Max_value(tab) :
+    a = max(liste)
+
+    for i in range (len(liste)):
+        if a == liste[i]:
+          return i
+
+    
+
+    
+def Max_value(tab):
     ke=Utility(tab)
     if ke!=0 : return ke
     else :
@@ -174,7 +198,7 @@ def Max_value(tab) :
              Input(a,grilleb)
              v=max(v,grilleb.Min_value(grilleb))
         return v
-                
+               
 def Min_value(tab) :
    ke=Utility(tab)
    if ke!=0 : return ke
