@@ -154,7 +154,7 @@ def estVictorieux(self) :
 def ValeurPossible(grille) :
     t=[]
     for i in range(grilleDim) :
-        if grille[i][0]!=0 :
+        if grille[0][i]!=0 :
             t.append(i)
     return t
 
